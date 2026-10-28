@@ -236,7 +236,21 @@ if(!gallery.length)gallery=[blank()];active=gallery[0];fields.forEach(k=>$(k).va
  document.getElementById('portableSaveSong').textContent='Save Song As…';
  document.getElementById('portableImportSong').textContent='Open Song…';
  document.getElementById('portableSaveSong').onclick=async()=>{
-  try{const song=current(),saved=await saveJson({format:'song-workshop-single-v1',kind,song},song.title||'Untitled Song');if(saved)status('Saved '+saved)}
+
+try {
+  const song = current();
+  const filename = prompt('Save song as:', song.title || 'Untitled Song');
+  if (filename === null) return;
+  if (!filename.trim()) {
+    status('Please enter a filename');
+    return;
+  }
+  const saved = await saveJson(
+    {format:'song-workshop-single-v1', kind, song},
+    filename.trim()
+  );
+  if (saved) status('Saved ' + saved);
+}
   catch(e){status('Save failed: '+e.message)}
  };
  const galSave=document.createElement('button');galSave.type='button';galSave.textContent='Save Gallery As…';wrap.insertBefore(galSave,document.getElementById('portableSongStatus'));
