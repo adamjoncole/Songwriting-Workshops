@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Original Song Workshop v6</title>
+<style>
+:root{font-family:system-ui,Segoe UI,Arial,sans-serif;color:#203047;background:#eef2f7}*{box-sizing:border-box}body{margin:0}header{background:#192d49;color:white;padding:20px max(20px,calc((100vw - 1320px)/2))}header h1{margin:0;font-size:25px}header p{margin:5px 0 0;color:#d6e1f2}main{max-width:1320px;margin:auto;padding:18px}button{border:0;border-radius:7px;background:#315a92;color:white;padding:9px 13px;cursor:pointer;font:inherit}button:hover{filter:brightness(.92)}button.secondary{background:#e4eaf3;color:#253c5c}button.danger{background:#a34551}input,textarea,select{font:inherit;border:1px solid #bfcbd9;border-radius:7px;padding:9px;width:100%;background:white;color:#203047}textarea{resize:vertical;min-height:75px}label{display:block;font-size:13px;font-weight:650;margin-bottom:5px;color:#40516b}.card{background:white;border-radius:12px;padding:18px;margin-bottom:16px;box-shadow:0 2px 12px #1b355011}.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.toolbar>*{width:auto}.toolbar input{min-width:180px}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.section{border:1px solid #dce4ee;border-radius:10px;padding:13px;margin:12px 0;background:#fcfdff}.sectionhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.sectionhead input{max-width:250px;font-weight:bold}.section textarea{min-height:135px;line-height:1.6;font-family:var(--editor-font,Georgia);font-size:var(--editor-size,17px)}.small{font-size:12px;color:#697991}.muted{color:#60738e}.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:7px;margin-top:10px;max-height:var(--original-gallery-height,280px);overflow-y:auto;align-content:start;padding:2px 5px 2px 0}.songcard{border:1px solid #dbe4ef;border-radius:10px;padding:8px;background:#f9fbfe}.songcard h3{margin:0 0 4px;font-size:16px}.songcard p{margin:0 0 5px;font-size:12px;color:#667b95}.songcard .toolbar{flex-wrap:nowrap;gap:4px;margin:0}.songcard .toolbar button{padding:5px 6px;font-size:11px;white-space:nowrap;flex:1;min-width:0}.preview{white-space:pre-wrap;font-family:var(--preview-font,Georgia),serif;font-size:var(--preview-size,17px);line-height:1.65;background:#fbfcfe;padding:18px;border:1px solid #dce4ee;border-radius:8px;min-height:200px}.preview .heading{font:bold 13px system-ui;color:#547092;margin:12px 0 4px}.hidden{display:none!important}h2{font-size:19px;margin:0 0 12px}h3{font-size:16px}.field{margin-bottom:12px}.tabs button[aria-pressed=true]{background:#193c69}.status{font-size:12px;color:#64748b}.rhyme{font-size:13px;background:#edf3fa;padding:12px;border-radius:8px}.note{border-left:3px solid #82a4cf;padding-left:12px;color:#60738e;font-size:13px}@media(max-width:850px){.two,.three{grid-template-columns:1fr}header{padding:18px}main{padding:10px}}
+</style></head><body>
+<header><h1>🎼 Original Song Workshop <span style="font-size:13px;opacity:.8">Version 5</span></h1><p>Find an idea. Follow it. Turn it into a song.</p></header>
+<main>
+<section class="card"><div class="toolbar"><h2 style="margin:0;flex:1">My Song Gallery</h2><button id="newSong">+ New Song</button><button class="secondary" id="backup">Back up gallery</button><button class="secondary" id="restore">Restore gallery</button><label style="width:auto;display:flex;align-items:center;gap:5px;font-size:12px">Gallery height <select id="galleryHeight" style="width:auto;padding:6px"><option value="160">Small</option><option value="280" selected>Medium</option><option value="440">Large</option><option value="0">Show all</option></select></label><input type="file" id="restoreFile" accept=".json,application/json" hidden></div><div class="toolbar" style="margin-top:12px"><input id="search" placeholder="Search songs"><select id="filter"><option value="all">All statuses</option><option>Idea</option><option>In Progress</option><option>Completed</option></select><select id="sort"><option value="recent">Recently edited</option><option value="title">Title A–Z</option></select></div><div id="gallery" class="gallery"></div><p class="small">Songs save automatically in this browser. Back up your gallery regularly; songs are not automatically synchronised between devices.</p></section>
+<section class="card"><div class="toolbar"><div style="flex:2;min-width:220px"><label>Song title</label><input id="title" placeholder="Untitled song"></div><div><label>Status</label><select id="status"><option>Idea</option><option>In Progress</option><option>Completed</option></select></div><div><label>Writing approach</label><div class="toolbar tabs"><button id="storyMode" aria-pressed="false">Story-based</button><button id="freeMode" aria-pressed="false">Freeform</button></div></div></div><p id="modeHint" class="note"></p></section>
+<section id="storyPanel" class="card"><h2>Story development</h2><p class="muted">Use whichever prompts help. Leave the rest blank.</p><div class="two"><div class="field"><label>Premise / what happens?</label><textarea id="premise" placeholder="What is the song about?"></textarea></div><div class="field"><label>Characters / point of view</label><textarea id="characters" placeholder="Who is speaking, and to whom?"></textarea></div><div class="field"><label>Setting / atmosphere</label><textarea id="setting" placeholder="Where and when? What does it feel like?"></textarea></div><div class="field"><label>Conflict / turning point</label><textarea id="conflict" placeholder="What changes, or what is at stake?"></textarea></div><div class="field"><label>Developments / surprises</label><textarea id="developments" placeholder="Where might the story go next?"></textarea></div><div class="field"><label>Ending / emotional destination</label><textarea id="ending" placeholder="Where could the song leave us?"></textarea></div></div></section>
+<section class="card"><h2>Ideas & scratchpad</h2><div class="two"><div class="field"><label>Loose lines, images, rhymes and phrases</label><textarea id="scratch" style="min-height:140px" placeholder="Capture anything here. Nothing has to fit yet."></textarea></div><div class="field"><label>Sound, mood, genre or Suno style notes</label><textarea id="style" style="min-height:140px" placeholder="Tempo, instruments, vocals, influences, atmosphere..."></textarea></div></div></section>
+<div class="two"><section class="card"><div class="toolbar"><h2 style="flex:1">Lyrics editor</h2><button id="addVerse">+ Verse</button><button class="secondary" id="addChorus">+ Chorus</button><button class="secondary" id="addBridge">+ Bridge</button><button class="secondary" id="addOther">+ Other</button></div><p class="small">Write one lyric line per line. You can rename, move, duplicate or remove any section.</p><div id="sections"></div></section>
+<section class="card"><div class="toolbar"><h2 style="flex:1">Live song preview</h2><button class="secondary" id="copySuno">Copy for Suno</button><button class="secondary" id="downloadTxt">Text</button><button class="secondary" id="downloadWord">Word</button><button class="secondary" id="downloadProject">Project JSON</button><button class="secondary" id="print">Print / PDF</button></div><div class="toolbar" style="margin:12px 0"><label for="editorFont">Editor font</label><select id="editorFont"><option>Georgia</option><option>Arial</option><option>Arial Narrow</option><option>Times New Roman</option><option>Verdana</option><option>Trebuchet MS</option><option>Courier New</option><option>Palatino Linotype</option><option>Garamond</option><option>Comic Sans MS</option><option>Segoe UI</option></select><label for="editorSize">Editor size</label><select id="editorSize"><option>14</option><option>16</option><option selected>17</option><option>18</option><option>20</option><option>22</option><option>24</option><option>28</option></select><label for="previewFont">Preview font</label><select id="previewFont"><option>Georgia</option><option>Arial</option><option>Arial Narrow</option><option>Times New Roman</option><option>Verdana</option><option>Trebuchet MS</option><option>Courier New</option><option>Palatino Linotype</option><option>Garamond</option><option>Comic Sans MS</option><option>Segoe UI</option></select><label for="previewSize">Preview size</label><select id="previewSize"><option>14</option><option>16</option><option selected>17</option><option>18</option><option>20</option><option>22</option><option>24</option><option>28</option></select></div><div id="preview" class="preview"></div><div class="rhyme" style="margin-top:15px"><b>Save to your computer</b><p class="small">Choose a folder in Edge or Chrome, then use Save to replace your previously saved file or Save As to create another. Your browser may ask permission each session.</p><div class="toolbar"><button class="secondary" id="chooseFolder">Choose output folder</button><button id="saveFile">Save</button><button class="secondary" id="saveFileAs">Save As…</button><button class="secondary" id="saveGalleryAs">Save song as new gallery entry</button></div><p id="folderStatus" class="small">No output folder selected. Browser downloads remain available above.</p></div><div class="rhyme" style="margin-top:15px"><b>Rhyme finder</b><p class="small">Find extensive exact and near rhymes online, with a small offline fallback when disconnected. Pronunciation varies.</p><div class="toolbar"><input id="rhymeWord" placeholder="Enter a word (e.g. night)" style="max-width:240px"><button id="findRhymes">Find rhymes</button></div><p id="rhymeResults" style="line-height:1.8">Enter a word to begin.</p></div><div class="rhyme" style="margin-top:15px"><b>Quick writing helper</b><p class="small">Count syllables approximately for a draft line. English pronunciation varies, so use your ear as the final judge.</p><input id="lineCheck" placeholder="Type a lyric line to estimate syllables"><p id="syllables">Approximate syllables: 0</p></div></section></div>
+</main>
+<span id="saveState" style="display:none"></span>
+<script>
+(()=>{'use strict';
+const KEY='original-song-workshop-gallery-v1',fields=['title','status','premise','characters','setting','conflict','developments','ending','scratch','style'];
+const $=id=>document.getElementById(id);
+const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();
+const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const blank=()=>({editorFont:'Georgia',editorSize:'17',previewFont:'Georgia',previewSize:'17',id:uid(),title:'Untitled song',status:'Idea',mode:'free',premise:'',characters:'',setting:'',conflict:'',developments:'',ending:'',scratch:'',style:'',sections:[{id:uid(),type:'Verse',name:'Verse 1',lyrics:''},{id:uid(),type:'Chorus',name:'Chorus',lyrics:''}],updated:Date.now()});
+let gallery=[],active=null,timer=null;
+try{const saved=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(saved))gallery=saved.filter(x=>x&&x.id&&Array.isArray(x.sections));}catch{}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(gallery));$('saveState').textContent='Saved';}catch(e){alert('Could not save your gallery in this browser. Please export a backup. '+e.message);}}
+function sync(){if(!active)return;fields.forEach(k=>active[k]=$(k).value);active.updated=Date.now();const i=gallery.findIndex(s=>s.id===active.id);if(i<0)gallery.unshift(active);else gallery[i]=active;clearTimeout(timer);timer=setTimeout(()=>{persist();renderGallery();},450);renderPreview();}
+function saveNow(){clearTimeout(timer);if(active){fields.forEach(k=>active[k]=$(k).value);active.updated=Date.now();const i=gallery.findIndex(s=>s.id===active.id);if(i<0)gallery.unshift(active);else gallery[i]=active;}persist();}
+function openSong(id){saveNow();active=gallery.find(s=>s.id===id);if(!active)return;if(active.savedFileName)savedFileNames.set(active.id,active.savedFileName);fields.forEach(k=>$(k).value=active[k]??'');setMode(active.mode||'free',false);renderSections();renderPreview();renderGallery();window.scrollTo({top:0,behavior:'smooth'});}
+function newSong(){saveNow();active=blank();gallery.unshift(active);persist();fields.forEach(k=>$(k).value=active[k]??'');setMode('free',false);renderSections();renderPreview();renderGallery();}
+function setMode(mode,save=true){active.mode=mode;$('storyPanel').classList.toggle('hidden',mode!=='story');$('storyMode').setAttribute('aria-pressed',String(mode==='story'));$('freeMode').setAttribute('aria-pressed',String(mode==='free'));$('modeHint').textContent=mode==='story'?'Build a narrative if you wish, then move freely between the story notes and lyrics.':'Start anywhere: a phrase, feeling, riff or conversation. The story planner is still available whenever you want it.';if(save)sync();}
+const originalGalleryHeightKey='original-song-gallery-height-v1';
+function setOriginalGalleryHeight(value){const n=Number(value);document.documentElement.style.setProperty('--original-gallery-height',n===0?'none':n+'px');$('galleryHeight').value=String(value);try{localStorage.setItem(originalGalleryHeightKey,String(value))}catch{}}
+$('galleryHeight').onchange=()=>setOriginalGalleryHeight($('galleryHeight').value);
+const rememberedOriginalHeight=localStorage.getItem(originalGalleryHeightKey);
+setOriginalGalleryHeight(['160','280','440','0'].includes(rememberedOriginalHeight)?rememberedOriginalHeight:'280');
+function renderGallery(){const query=$('search').value.toLowerCase(),filter=$('filter').value;let items=gallery.filter(s=>(filter==='all'||s.status===filter)&&[s.title,s.premise,s.scratch].join(' ').toLowerCase().includes(query));items.sort((a,b)=>$('sort').value==='title'?a.title.localeCompare(b.title):(b.updated||0)-(a.updated||0));$('gallery').innerHTML=items.length?items.map(s=>'<div class="songcard"><h3>'+escapeHtml(s.title||'Untitled song')+'</h3><p>'+escapeHtml(s.status||'Idea')+' · '+(s.mode==='story'?'Story-based':'Freeform')+' · '+new Date(s.updated||Date.now()).toLocaleDateString()+'</p><div class="toolbar"><button data-action="open" data-id="'+escapeHtml(s.id)+'">Open</button><button class="secondary" data-action="duplicate" data-id="'+escapeHtml(s.id)+'">Duplicate</button><button class="danger" data-action="delete" data-id="'+escapeHtml(s.id)+'">Delete</button></div></div>').join(''):'<p class="muted">No songs match. Start a new one!</p>';}
+function renderSections(){$('sections').innerHTML=active.sections.map((s,i)=>'<div class="section"><div class="sectionhead"><input aria-label="Section name" data-field="name" data-id="'+escapeHtml(s.id)+'" value="'+escapeHtml(s.name)+'"><button class="secondary" data-action="up" data-id="'+escapeHtml(s.id)+'" '+(i===0?'disabled':'')+'>↑</button><button class="secondary" data-action="down" data-id="'+escapeHtml(s.id)+'" '+(i===active.sections.length-1?'disabled':'')+'>↓</button><button class="secondary" data-action="clone" data-id="'+escapeHtml(s.id)+'">Duplicate</button><button class="danger" data-action="remove" data-id="'+escapeHtml(s.id)+'">×</button></div><textarea aria-label="Lyrics for '+escapeHtml(s.name)+'" data-field="lyrics" data-id="'+escapeHtml(s.id)+'" placeholder="Write lyrics here...">'+escapeHtml(s.lyrics)+'</textarea><p class="small">'+s.lyrics.split('\n').filter(x=>x.trim()).length+' lines</p></div>').join('');}
+function textLyrics(){return active.sections.map(s=>'['+(s.name||s.type)+']\n'+(s.lyrics||'').trim()).join('\n\n').trim();}
+function renderPreview(){applyFont();const text=active.sections.map(s=>'<div class="heading">['+escapeHtml(s.name||s.type)+']</div><div>'+escapeHtml(s.lyrics||'').replace(/\n/g,'<br>')+'</div>').join('');$('preview').innerHTML=text||'<span class="muted">Your lyrics will appear here as you write.</span>';}
+function addSection(type){const n=active.sections.filter(s=>s.type===type).length+1;active.sections.push({id:uid(),type,name:type==='Chorus'?'Chorus':type+' '+n,lyrics:''});renderSections();sync();}
+function download(filename,content,mime){const blob=new Blob([content],{type:mime}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
+function safeName(){return (active.title||'original-song').replace(/[^a-z0-9 _-]/gi,'').trim().replace(/\s+/g,'-')||'original-song';}
+function approxSyllables(line){return (line.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g)||[]).reduce((n,w)=>{w=w.replace(/e$/,'');return n+Math.max(1,(w.match(/[aeiouy]+/g)||[]).length);},0);}
+fields.forEach(k=>$(k).addEventListener('input',sync));
+$('status').addEventListener('change',sync);
+$('storyMode').onclick=()=>setMode('story');$('freeMode').onclick=()=>setMode('free');
+$('newSong').onclick=newSong;
+['Verse','Chorus','Bridge','Other'].forEach(t=>$('add'+t).onclick=()=>addSection(t));
+$('sections').addEventListener('input',e=>{const id=e.target.dataset.id,field=e.target.dataset.field;if(!id||!field)return;const s=active.sections.find(x=>x.id===id);if(s){s[field]=e.target.value;sync();}});
+$('sections').addEventListener('change',e=>{if(e.target.dataset.field==='name')renderSections();});
+$('sections').addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(!b)return;const i=active.sections.findIndex(x=>x.id===b.dataset.id),a=b.dataset.action;if(i<0)return;if(a==='remove'){if(!confirm('Remove this section?'))return;active.sections.splice(i,1);}if(a==='clone')active.sections.splice(i+1,0,{...active.sections[i],id:uid(),name:active.sections[i].name+' copy'});if(a==='up'&&i>0)[active.sections[i-1],active.sections[i]]=[active.sections[i],active.sections[i-1]];if(a==='down'&&i<active.sections.length-1)[active.sections[i+1],active.sections[i]]=[active.sections[i],active.sections[i+1]];renderSections();sync();});
+$('gallery').addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(!b)return;const id=b.dataset.id,a=b.dataset.action;if(a==='open')openSong(id);if(a==='duplicate'){saveNow();const s=gallery.find(x=>x.id===id);if(!s)return;const copy=JSON.parse(JSON.stringify(s));copy.id=uid();copy.title+=' (copy)';copy.sections.forEach(x=>x.id=uid());copy.updated=Date.now();gallery.unshift(copy);persist();openSong(copy.id);}if(a==='delete'){const s=gallery.find(x=>x.id===id);if(!s||!confirm('Delete "'+s.title+'"? This cannot be undone unless you have a backup.'))return;saveNow();gallery=gallery.filter(x=>x.id!==id);if(active.id===id){active=gallery[0]||blank();if(!gallery.length)gallery.push(active);fields.forEach(k=>$(k).value=active[k]??'');setMode(active.mode||'free',false);renderSections();renderPreview();}persist();renderGallery();}});
+['search','filter','sort'].forEach(k=>$(k).addEventListener('input',renderGallery));
+$('copySuno').onclick=async()=>{try{await navigator.clipboard.writeText(textLyrics());alert('Suno-ready lyrics copied.');}catch{const t=document.createElement('textarea');t.value=textLyrics();document.body.append(t);t.select();document.execCommand('copy');t.remove();alert('Lyrics copied.');}};
+$('downloadTxt').onclick=()=>download(safeName()+'.txt',textLyrics(),'text/plain');
+$('downloadWord').onclick=()=>download(safeName()+'.doc','<html><head><meta charset="utf-8"></head><body style="font-family:'+escapeHtml(active.previewFont||active.fontChoice||'Georgia')+';font-size:'+escapeHtml(active.previewSize||active.fontSize||'17')+'px"><h1>'+escapeHtml(active.title)+'</h1>'+active.sections.map(s=>'<h3>'+escapeHtml(s.name)+'</h3><p>'+escapeHtml(s.lyrics).replace(/\n/g,'<br>')+'</p>').join('')+'</body></html>','application/msword');
+$('downloadProject').onclick=()=>download(safeName()+'.json',JSON.stringify(active,null,2),'application/json');
+$('backup').onclick=()=>{saveNow();download('original-song-gallery-backup.json',JSON.stringify({format:KEY,songs:gallery},null,2),'application/json');};
+$('restore').onclick=()=>$('restoreFile').click();
+$('restoreFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text()),songs=Array.isArray(data)?data:data.songs;if(!Array.isArray(songs)||!songs.every(x=>x&&typeof x.id==='string'&&Array.isArray(x.sections)))throw Error('Not a valid gallery backup');saveNow();const ids=new Set(gallery.map(x=>x.id));for(const song of songs){if(ids.has(song.id))continue;gallery.push(song);ids.add(song.id);}persist();renderGallery();alert('Gallery restored. Existing songs were preserved.');}catch(err){alert('Could not restore gallery: '+err.message);}e.target.value='';};
+$('print').onclick=()=>{const w=window.open('','_blank');if(!w){alert('Please allow pop-ups to print.');return;}w.document.write('<html><head><title>'+escapeHtml(active.title)+'</title><style>body{font:16px Georgia;max-width:700px;margin:45px auto}p{line-height:1.7}</style></head><body><h1>'+escapeHtml(active.title)+'</h1>'+active.sections.map(s=>'<h3>'+escapeHtml(s.name)+'</h3><p>'+escapeHtml(s.lyrics).replace(/\n/g,'<br>')+'</p>').join('')+'</body></html>');w.document.close();w.focus();w.print();};
+$('lineCheck').oninput=()=>{$('syllables').textContent='Approximate syllables: '+approxSyllables($('lineCheck').value);};
+function applyFont(){const ef=active.editorFont||active.fontChoice||'Georgia',es=active.editorSize||active.fontSize||'17',pf=active.previewFont||active.fontChoice||'Georgia',ps=active.previewSize||active.fontSize||'17';$('editorFont').value=ef;$('editorSize').value=es;$('previewFont').value=pf;$('previewSize').value=ps;document.documentElement.style.setProperty('--editor-font',JSON.stringify(ef));document.documentElement.style.setProperty('--editor-size',es+'px');document.documentElement.style.setProperty('--preview-font',JSON.stringify(pf));document.documentElement.style.setProperty('--preview-size',ps+'px')}
+for(const key of ['editorFont','editorSize','previewFont','previewSize'])$(key).addEventListener('change',()=>{active[key]=$(key).value;sync()});
+
+/* File saving: folder access is deliberately requested by the user, not on page load. */
+let outputFolder=null;
+const savedFileNames=new Map();
+function folderMessage(message){$('folderStatus').textContent=message}
+$('chooseFolder').onclick=async()=>{
+ if(!window.showDirectoryPicker){folderMessage('Folder selection needs a recent version of Edge or Chrome. Use Text / Word downloads instead.');return}
+ try{outputFolder=await window.showDirectoryPicker({mode:'readwrite'});folderMessage('Output folder: '+outputFolder.name+' (browser permission may be requested again later).')}
+ catch(e){if(e.name!=='AbortError')folderMessage('Could not select folder: '+e.message)}
+};
+async function writeSong(asNew){
+ saveNow();
+ if(!outputFolder){folderMessage('Please choose an output folder first.');return}
+ let filename=savedFileNames.get(active.id)||safeName()+'.txt';
+ if(asNew){const proposed=prompt('Save As — file name:',safeName()+'.txt');if(proposed===null)return;filename=proposed.trim();if(!filename)return}
+ filename=filename.replace(/[\\/:*?"<>|]/g,'_');
+ if(!/\.txt$/i.test(filename))filename+='.txt';
+ try{
+   const permission=await outputFolder.requestPermission?.({mode:'readwrite'});
+   if(permission&&permission!=='granted')throw Error('Folder write permission was not granted');
+   let exists=false;
+   try{await outputFolder.getFileHandle(filename);exists=true}catch(e){if(e.name!=='NotFoundError')throw e}
+   if(exists&&(asNew||savedFileNames.get(active.id)!==filename)&&!confirm('Replace existing file "'+filename+'"? Choose Cancel to keep it unchanged.'))return;
+   const handle=await outputFolder.getFileHandle(filename,{create:true});
+   const writable=await handle.createWritable();await writable.write(textLyrics());await writable.close();
+   savedFileNames.set(active.id,filename);active.savedFileName=filename;persist();
+   folderMessage('Saved: '+filename+' in '+outputFolder.name);
+ }catch(e){folderMessage('Save failed: '+e.message)}
+}
+$('saveFile').onclick=()=>writeSong(false);
+$('saveFileAs').onclick=()=>writeSong(true);
+$('saveGalleryAs').onclick=()=>{
+ saveNow();const title=prompt('Title for the new song:',active.title+' (copy)');
+ if(title===null||!title.trim())return;
+ const copy=JSON.parse(JSON.stringify(active));copy.id=uid();copy.title=title.trim();copy.sections.forEach(x=>x.id=uid());copy.updated=Date.now();delete copy.savedFileName;
+ gallery.unshift(copy);persist();openSong(copy.id);
+};
+const rhymeGroups=[
+'night light bright sight flight might right tight white height fight delight tonight',
+'day say way play stay away gray grey may bay clay delay display',
+'love dove above glove shove',
+'heart start part art chart smart apart',
+'blue true new knew through grew few view clue',
+'time rhyme chime climb prime crime sublime',
+'fire desire higher wire choir tire',
+'rain pain train gain chain remain again plain',
+'sky high fly cry why sigh goodbye',
+'home roam foam dome poem',
+'dream stream beam gleam scheme theme',
+'old cold bold told gold hold sold unfold',
+'song long strong wrong along belong',
+'you do too two who blue true',
+'me see be free tree sea key agree',
+'feel real steal heal wheel reveal',
+'find mind kind blind behind remind',
+'gone dawn on drawn lawn',
+'stone alone known shown grown thrown',
+'road showed owed flowed slowed',
+'face place grace space trace embrace',
+'word heard bird third stirred',
+'hand land sand stand grand planned',
+'door more floor shore before explore',
+'fall call all small tall wall',
+'life wife knife strife',
+'sun run done fun begun one',
+'moon soon tune June spoon',
+'star far are car guitar',
+'deep sleep keep leap steep weep',
+'break take make wake shake ache',
+'change strange range exchange',
+'free three tree sea be me',
+'world curled whirled unfurled',
+'heartfelt melt felt dealt',
+'hope cope rope slope',
+'green seen mean scene clean',
+'black back track lack attack',
+'red said bed head spread',
+'friend end bend send pretend',
+'kiss miss bliss this',
+'cold old told gold bold',
+'line fine mine shine sign divine',
+'care share bare rare air fair',
+'late fate gate wait straight',
+'lose choose blues news shoes',
+'walk talk chalk',
+'still hill will fill until',
+'young sung hung tongue',
+'peace piece release cease',
+'ground sound found around bound',
+'city pretty witty pity',
+'river shiver quiver giver',
+'better letter sweater debtor',
+'never ever forever clever',
+'remember December September November',
+'feeling healing dealing revealing',
+'broken spoken token woken',
+'shadow meadow',
+'water daughter slaughter',
+'sea free be me key',
+'tear near clear fear dear year',
+'tear bear wear where there',
+'eyes skies lies rise surprise',
+'lightning frightening enlightening',
+'motion ocean devotion emotion',
+'story glory territory',
+'quiet riot diet',
+'lonely only slowly',
+'away today delay replay',
+'begin within again'
+].map(s=>s.split(' '));
+const rhymeIndex=new Map();
+for(const group of rhymeGroups)for(const word of group){const current=rhymeIndex.get(word)||new Set();group.filter(w=>w!==word).forEach(w=>current.add(w));rhymeIndex.set(word,current)}
+let rhymeRequest=0;
+async function findRhymes(){
+ const word=$('rhymeWord').value.toLowerCase().trim().replace(/[^a-z'-]/g,'');
+ const id=++rhymeRequest;
+ if(!word){$('rhymeResults').textContent='Enter a word to begin.';return}
+ $('rhymeResults').textContent='Finding rhymes for "'+word+'"...';
+ const render=(label,words)=>{const div=document.createElement('div');const strong=document.createElement('strong');strong.textContent=label;div.append(strong);const p=document.createElement('p');p.style.lineHeight='1.9';p.style.margin='6px 0 15px';p.textContent=words.length?words.join(' · '):'No suggestions found';div.append(p);$('rhymeResults').append(div)};
+ try{
+  const endpoint='https://api.datamuse.com/words?';
+  const queries=['rel_rhy','rel_nry'].map(rel=>fetch(endpoint+rel+'='+encodeURIComponent(word)+'&max=200').then(async response=>{if(!response.ok)throw Error('Rhyming service unavailable');return response.json()}));
+  const [exact,near]=await Promise.all(queries);
+  if(id!==rhymeRequest)return;
+  const exactWords=[...new Set(exact.map(x=>x.word).filter(Boolean))];
+  const nearWords=[...new Set(near.map(x=>x.word).filter(x=>x&&!exactWords.includes(x)))];
+  $('rhymeResults').replaceChildren();
+  render('Exact rhymes ('+exactWords.length+')',exactWords);
+  render('Near rhymes ('+nearWords.length+')',nearWords);
+  const foot=document.createElement('small');foot.textContent='Suggestions provided by Datamuse. Results are approximate and depend on pronunciation.';$('rhymeResults').append(foot);
+ }catch(e){
+  if(id!==rhymeRequest)return;
+  const found=rhymeIndex.get(word);
+  $('rhymeResults').replaceChildren();
+  render('Offline suggestions',found?[...found].sort():[]);
+  const foot=document.createElement('small');foot.textContent='Online lookup unavailable; showing the smaller built-in list.';$('rhymeResults').append(foot);
+ }
+}
+$('findRhymes').onclick=findRhymes;
+$('rhymeWord').addEventListener('keydown',e=>{if(e.key==='Enter')findRhymes()});
+
+window.addEventListener('pagehide',saveNow);
+if(!gallery.length)gallery=[blank()];active=gallery[0];fields.forEach(k=>$(k).value=active[k]??'');setMode(active.mode||'free',false);renderSections();renderPreview();renderGallery();persist();
+/* Portable individual-song JSON: never replaces a gallery on import. */
+(function(){
+ const wrap=document.createElement('div');
+ wrap.style.cssText='position:static;margin:12px 0;background:#17314d;color:white;padding:10px 12px;border-radius:9px;font:13px system-ui;display:flex;gap:7px;align-items:center;flex-wrap:wrap;width:100%;box-sizing:border-box';
+ wrap.innerHTML='<strong>Individual songs</strong> <button type="button" id="portableSaveSong">Save song JSON</button> <button type="button" id="portableImportSong">Import song JSON</button> <input id="portableSongFile" type="file" accept=".json,application/json" hidden> <small id="portableSongStatus"></small>';
+ const host=document.getElementById('gallery');if(!host)throw Error('Gallery panel not found');host.parentElement.insertBefore(wrap,host); 
+ const status=t=>document.getElementById('portableSongStatus').textContent=t;
+ const clean=s=>String(s||'Untitled Song').replace(/[\\/:*?"<>|]/g,'_').trim().slice(0,110)||'Untitled Song';
+ const kind="original";
+ const current=()=>{saveNow();return JSON.parse(JSON.stringify(active));};
+ const add=(song)=>{
+  saveNow();const copy=JSON.parse(JSON.stringify(song));copy.id=uid();copy.updated=Date.now();delete copy.savedFileName;gallery.unshift(copy);persist();openSong(copy.id);
+ };
+
+ const saveJson=async(payload,filename)=>{
+  const data=JSON.stringify(payload,null,2),safe=clean(filename.replace(/\.json$/i,''))+'.json';
+  if(location.protocol!=='file:'&&typeof window.showSaveFilePicker==='function'){
+   try{
+    const handle=await window.showSaveFilePicker({suggestedName:safe,types:[{description:'JSON files',accept:{'application/json':['.json']}}]});
+    const writable=await handle.createWritable();await writable.write(data);await writable.close();return handle.name||safe;
+   }catch(e){if(e.name==='AbortError')return null;throw e}
+  }
+  const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=safe;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
+  return safe;
+ };
+ const pickJson=async(input)=>{input.value='';input.click();return null;};
+ document.getElementById('portableSaveSong').textContent='Save Song As…';
+ document.getElementById('portableImportSong').textContent='Open Song…';
+ document.getElementById('portableSaveSong').onclick=async()=>{
+  try{const song=current(),saved=await saveJson({format:'song-workshop-single-v1',kind,song},song.title||'Untitled Song');if(saved)status('Saved '+saved)}
+  catch(e){status('Save failed: '+e.message)}
+ };
+ const galSave=document.createElement('button');galSave.type='button';galSave.textContent='Save Gallery As…';wrap.insertBefore(galSave,document.getElementById('portableSongStatus'));
+ const galOpen=document.createElement('button');galOpen.type='button';galOpen.textContent='Open Gallery…';wrap.insertBefore(galOpen,document.getElementById('portableSongStatus'));
+ const galFile=document.createElement('input');galFile.type='file';galFile.accept='.json,application/json';galFile.hidden=true;wrap.append(galFile);
+ const gallerySongs=()=>{saveNow();return JSON.parse(JSON.stringify(gallery));};
+ const downloadGallery=async(songs,filename)=>saveJson({format:'song-workshop-named-gallery-v1',kind,name:filename.replace(/\.json$/i,''),songs},filename);
+ galSave.onclick=async()=>{
+  try{const label=prompt('Name this gallery:',kind==='original'?'Original Songs':'Song Parodies');if(label===null)return;if(!label.trim())throw Error('Enter a gallery name');
+   const songs=gallerySongs(),saved=await downloadGallery(songs,label);if(saved)status('Saved '+saved+' ('+songs.length+' songs)');
+  }catch(e){status('Gallery save failed: '+e.message)}
+ };
+ const openGalleryFile=async(file)=>{
+  try{
+   const data=JSON.parse(await file.text()),songs=data&&data.songs;
+   if(!data||!Array.isArray(songs)||!songs.every(s=>s&&typeof s==='object'&&typeof s.id==='string'&&Array.isArray(s.sections))||!(data.format==='song-workshop-named-gallery-v1'&&data.kind===kind || data.format==='original-song-workshop-gallery-v1' || Array.isArray(data))))throw Error('Invalid or incompatible gallery file');
+   if(!confirm('Open "'+String(data.name||file.name)+'" with '+songs.length+' songs? This replaces the current gallery. Save the current gallery first if needed.'))return;
+   const previous=gallerySongs(),backup=await downloadGallery(previous,kind+'-safety-backup-'+new Date().toISOString().slice(0,10));
+   if(!backup){status('Opening cancelled: safety backup was not saved');return}
+   gallery=songs.length?songs:[blank()];active=gallery[0];persist();fields.forEach(k=>$(k).value=active[k]??'');setMode(active.mode||'free',false);renderSections();renderPreview();renderGallery();status('Opened '+String(data.name||file.name));
+  }catch(e){status('Gallery open failed: '+e.message)}
+ };
+ galOpen.onclick=async()=>{try{const f=await pickJson(galFile);if(f)await openGalleryFile(f)}catch(e){status('Open failed: '+e.message)}};
+ galFile.onchange=async()=>{const f=galFile.files&&galFile.files[0];if(f)await openGalleryFile(f);galFile.value=''};
+ const picker=document.getElementById('portableSongFile');
+ document.getElementById('portableImportSong').onclick=async()=>{try{const f=await pickJson(picker);if(f)await importSongFile(f)}catch(e){status('Open failed: '+e.message)}};
+ const importSongFile=async(file)=>{
+  if(!file)return;
+  try{
+   const data=JSON.parse(await file.text());
+   const song=(data&&data.format==='song-workshop-single-v1'&&data.kind===kind)?data.song:(data&&typeof data==='object'&&!Array.isArray(data)&&Array.isArray(data.sections)?data:null);
+   if(!song||!Array.isArray(song.sections)||typeof song.id!=='string')
+     throw Error('This is not an individual '+kind+' song JSON file.');
+   if(!confirm('Add "'+String(song.title||'Untitled Song')+'" to this gallery? Existing songs will be kept.'))return;
+   add(song);status('Added '+String(song.title||'Untitled Song')+' to gallery');
+  }catch(e){status('Import failed: '+e.message)}
+ };
+ picker.onchange=async()=>{const f=picker.files&&picker.files[0];if(f)await importSongFile(f);picker.value=''};
+})();
+
+})();
+
+
+</script></body></html>
