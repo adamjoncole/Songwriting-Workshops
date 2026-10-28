@@ -252,7 +252,7 @@ if(!gallery.length)gallery=[blank()];active=gallery[0];fields.forEach(k=>$(k).va
  const openGalleryFile=async(file)=>{
   try{
    const data=JSON.parse(await file.text()),songs=data&&data.songs;
-   if(!data||!Array.isArray(songs)||!songs.every(s=>s&&typeof s==='object'&&typeof s.id==='string'&&Array.isArray(s.sections))||!(data.format==='song-workshop-named-gallery-v1'&&data.kind===kind || data.format==='original-song-workshop-gallery-v1' || Array.isArray(data))))throw Error('Invalid or incompatible gallery file');
+   if(!data||!Array.isArray(songs)||!songs.every(s=>s&&typeof s==='object'&&typeof s.id==='string'&&Array.isArray(s.sections))||!(data.format==='song-workshop-named-gallery-v1'&&data.kind===kind || data.format==='original-song-workshop-gallery-v1' || Array.isArray(data)))throw Error('Invalid or incompatible gallery file');
    if(!confirm('Open "'+String(data.name||file.name)+'" with '+songs.length+' songs? This replaces the current gallery. Save the current gallery first if needed.'))return;
    const previous=gallerySongs(),backup=await downloadGallery(previous,kind+'-safety-backup-'+new Date().toISOString().slice(0,10));
    if(!backup){status('Opening cancelled: safety backup was not saved');return}
